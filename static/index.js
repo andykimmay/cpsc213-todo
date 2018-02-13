@@ -14,11 +14,15 @@ function reqListener () {
 	this.response.forEach((chat) => {
 		var newli = document.createElement("li");
 		newli.appendChild(document.createTextNode(chat.body));
+		
+		var button = document.createElement("button");
+		button.innerHTML = "Mark Complete";
+		newli.appendChild(button);
+		newli.setAttribute("id","element4");
+
 		ulElement.appendChild(newli);
 	});
 }
-
-
 
 // requestChats requests the latest chats from
 // the server.
@@ -49,6 +53,14 @@ function sendChatToServer(){
 	textBox.value = '';
 }
 
+function sendCompleteToDB(){
+	var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+	xmlhttp.open("POST", "/api/chats");
+	xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+	xmlhttp.send(JSON.stringify({ complete: 1 }));
+	textBox.value = '';
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 	const submitButton = document.querySelector('input[type=submit]');
 	submitButton.addEventListener('click', (event) => {
@@ -57,4 +69,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		event.preventDefault();
 		sendChatToServer();
 	});
+
+	const completeButton = document.querySelector('button[type=submit]');
+	completeButton.addEventListener('click', (event) => {
+		event.preventDefault();
+		sendCompleteToDB();
+	});
 });
+
+

@@ -26,23 +26,24 @@ app.get('/api/chats', (req, res) => {
 // Our API for posting new chats
 app.post('/api/chats', (req, res) => {
 	const chatBody = req.body.body;
-	db.all('INSERT INTO chats (body) VALUES (?)', chatBody, function(err, rows){
+	db.all('INSERT INTO todo (body) VALUES (?)', chatBody, function(err, rows){
 		// Return a 500 status if there was an error, otherwise success status
 		res.send(err ? 500 : 200);
 	});
 });
 
 function getChats(latestID, cb){
-	db.all('SELECT rowid,body,date FROM chats WHERE rowid > (?)', latestID, function(err, rows){
+	db.all('SELECT rowid,body,date,completed FROM todo WHERE rowid > (?)', latestID, function(err, rows){
 		cb(rows);
 	});
 }
 
 
 const create_table = `
-CREATE TABLE IF NOT EXISTS chats (
+CREATE TABLE IF NOT EXISTS todo (
   date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  body TEXT
+  body TEXT,
+  completed BOOLEAN DEFAULT 0
 )
 `;
 
